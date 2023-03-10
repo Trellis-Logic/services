@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  snmp-server:
+    entrypoint: [ "python3", "/usr/src/snmp-server.py", "-c", "/data/config/config.py", "-p", "${PORT}" ]
+    container_name: snmp-server
+    image: ghcr.io/trellis-logic/snmp-server:1.0
+    volumes:
+      - './conf/snmp-server.py:/data/config/config.py:ro'
+    ports:
+      - "${PORT}:${PORT}/udp"
+    networks:
+      core_sighthound:
+        aliases:
+          - snmp-server
+
+networks:
+  core_sighthound:
+    external: ${CORE_SIGHTHOUND_EXTERNAL_NETWORK}

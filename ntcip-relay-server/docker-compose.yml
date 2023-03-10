@@ -1,0 +1,18 @@
+version: "2"
+
+services:
+  ntcip-relay-server:
+    container_name: ntcip-relay-server
+    image: ghcr.io/trellis-logic/ntcip-relay-server:1.0
+    volumes:
+      - './conf/ntcip-relay-server.json:/data/config/config.json:ro'
+    ports:
+      - '8080:8080'
+    networks:
+      core_sighthound:
+        aliases:
+          - ntcip-relay-server
+
+networks:
+  core_sighthound:
+    external: ${CORE_SIGHTHOUND_EXTERNAL_NETWORK}
