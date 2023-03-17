@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  example-sio-rtsp:
+    build: .
+    container_name: event-webhooks
+    restart: always
+    environment:
+      - AMQP_HOST=rabbitmq
+      - AMQP_PORT=5672
+    volumes:
+      - ./src:/usr/src/app
+      - ../lib:/usr/src/lib
+    command: ["/usr/bin/python3", "/usr/src/app/main.py"]
