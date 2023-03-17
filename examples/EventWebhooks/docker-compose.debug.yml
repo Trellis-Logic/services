@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  event-webhooks-debug:
+    build: .
+    container_name: event-webhooks-debug
+    restart: always
+    environment:
+      - AMQP_HOST=rabbitmq
+      - AMQP_PORT=5672
+    volumes:
+      - ./src:/usr/src/app
+      - ../lib:/usr/src/lib
+    command: ["sh", "-c", "/usr/bin/python3 -m pip install debugpy -t /tmp && /usr/bin/python3 /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 /usr/src/app/main.py "]
+    ports:
+      - 5678:5678
