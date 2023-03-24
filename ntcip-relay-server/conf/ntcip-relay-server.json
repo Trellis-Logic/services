@@ -1,5 +1,5 @@
 {
-    "ntcip_controller_ip": "0.0.0.0",
+    "ntcip_controller_ip": "snmp-server",
     "ntcip_controller_port": "501",
     "ntcip_community": "administrator",
     "ntcip_version": 1,
