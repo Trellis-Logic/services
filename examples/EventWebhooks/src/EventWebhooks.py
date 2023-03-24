@@ -14,7 +14,7 @@ class EventWebhooks:
         def invoke(self):
             r = requests.post(self.url, json = self.json)
             r.raise_for_status()
-            logging.info(f"POST request complete for {self.json} on {self.url} with response {r}")
+            return r
 
 
     class RegexWebhook():
@@ -53,8 +53,9 @@ class EventWebhooks:
                             else:
                                 match = True
             if match and self.hook:
-                self.hook.invoke()
+                r = self.hook.invoke()
                 self.hook_invocations = self.hook_invocations + 1
+                logging.info(f"hook complete for {self.name} on {self.hook.url} with payload {self.hook.json} and response {r}")
 
     def __init__(self) -> None:
         self.webhooks = []
@@ -102,7 +103,7 @@ class EventWebhooks:
                                         'sensor_name_events' : wh.sensor_name_events,
                                         'hook_invocations': wh.hook_invocations
             }
-        logging.info(f"{self.callback_count} callbacks: {json.dumps(sensor_matches, indent=4, sort_keys=True)}")
+        logging.info(f"Processed {self.callback_count} callbacks with hook status: {sensor_matches}")
         threading.Timer(10, self.print_status).start()
 
 
