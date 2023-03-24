@@ -2,6 +2,7 @@
 import AMQPListener as amqp
 from EventWebhooks import EventWebhooks
 import os
+import logging
 
 def get_args():
     amqp_conf = {}
@@ -13,6 +14,7 @@ def get_args():
     return amqp_conf
 
 def main():
+    logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
     # getting the required information from the user
     amqp_conf = get_args()
     # Create an AMQP listener
