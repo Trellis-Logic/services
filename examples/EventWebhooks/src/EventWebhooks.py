@@ -7,9 +7,9 @@ import threading
 
 class EventWebhooks:
     class HookAction():
-        def __init__(self, url = 'http://localhost', json = None, headers = 'Content-Type: application/json'):
-            self.url = url
-            self.json = json
+        def __init__(self, dict):
+            self.url = dict.get('url',None)
+            self.json = dict.get('json', None)
 
         def invoke(self):
             r = requests.post(self.url, json = self.json)
@@ -18,12 +18,11 @@ class EventWebhooks:
 
 
     class RegexWebhook():
-        def __init__(self, name = None, sensor_name_match = None, sensor_content_match = None,
-                        hook = None):
-            self.name = name
-            self.sensor_name_match = sensor_name_match
-            self.sensor_content_match = sensor_content_match
-            self.hook = hook
+        def __init__(self, dict):
+            self.name = dict.get('name', "NoName")
+            self.sensor_name_match = dict.get('sensor_name_match', None)
+            self.sensor_content_match = dict.get('sensor_content_match', None)
+            self.hooks = dict.get('hooks', None)
             self.sensor_events = 0
             self.sensor_name_events = 0
             self.hook_invocations = 0
@@ -52,48 +51,30 @@ class EventWebhooks:
                                                 match = True
                             else:
                                 match = True
-            if match and self.hook:
-                r = self.hook.invoke()
-                self.hook_invocations = self.hook_invocations + 1
-                logging.info(f"hook complete for {self.name} on {self.hook.url} with payload {self.hook.json} and response {r}")
+            if match and self.hooks:
+                for hook in self.hooks:
+                    try:
+                        r = hook.invoke()
+                        self.hook_invocations = self.hook_invocations + 1
+                        logging.info(f"hook complete for {self.name} on {hook.url} with payload {hook.json} and response {r}")
+                    except Exception as e:
+                        logging.exception(f"hook for {self.name} failed with exception")
 
-    def __init__(self) -> None:
+    def __init__(self, config_file) -> None:
         self.webhooks = []
         self.callback_count = 0
-        self.webhooks.append(EventWebhooks.RegexWebhook(
-            name = "SignalOn",
-            sensor_name_match = {
-                "presenceSensor" : "D4146053-308A-47F5-809A-4244AA86F6B9"
-            },
-            sensor_content_match ={
-                "updateCount" : 1
-            },
-            hook = EventWebhooks.HookAction(
-                url="http://ntcip-relay-server:8080/pedcall/",
-                json={
-                    "phase_control_group" : 1,
-                    "phase" : 1,
-                    "activate" : True,
-                    "mib" : "1.3.6.1.4.1.1206.4.2.1.1.5.1.7"
-                })
-        ))
-        self.webhooks.append(EventWebhooks.RegexWebhook(
-            name = "SignalOff",
-            sensor_name_match = {
-                "presenceSensor" : "D4146053-308A-47F5-809A-4244AA86F6B9"
-            },
-            sensor_content_match = {
-                "endedAt" : ".*"
-            },
-            hook = EventWebhooks.HookAction(
-                url="http://ntcip-relay-server:8080/pedcall/",
-                json={
-                    "phase_control_group" : 1,
-                    "phase" : 1,
-                    "activate" : False,
-                    "mib" : "1.3.6.1.4.1.1206.4.2.1.1.5.1.7"
-                })
-        ))
+        with open(config_file) as json_file:
+            data = json.load(json_file)
+            if 'regex_webhooks' in data:
+                for webhook in data['regex_webhooks']:
+                    hook = None
+                    logging.info(f"Setting up webhook {webhook} based on configuration")
+                    if 'hooks' in webhook:
+                        hooks = []
+                        for hook in webhook['hooks']:
+                            hooks.append(EventWebhooks.HookAction(hook))
+                        webhook['hooks'] = hooks
+                    self.webhooks.append(EventWebhooks.RegexWebhook(webhook))
         threading.Timer(10, self.print_status).start()
 
     def print_status(self):
@@ -113,5 +94,5 @@ class EventWebhooks:
             try:
                 wh.run_match_action(message)
             except Exception as e:
-                logging.error(f"Caught exception {e} handling {wh.name} webhook")
+                logging.exception(f"Caught exception handling {wh.name} webhook")
                 traceback.print_exc()

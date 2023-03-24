@@ -3,6 +3,7 @@ import AMQPListener as amqp
 from EventWebhooks import EventWebhooks
 import os
 import logging
+import argparse
 
 def get_args():
     amqp_conf = {}
@@ -13,16 +14,21 @@ def get_args():
     print ("AMQP configuration:", amqp_conf)
     return amqp_conf
 
-def main():
+def main(args):
     logging.basicConfig(level=logging.INFO)
     # getting the required information from the user
     amqp_conf = get_args()
     # Create an AMQP listener
     amqp_listener = amqp.AMQPListener(amqp_conf)
     # Register the callback
-    webhooks = EventWebhooks()
+    webhooks = EventWebhooks(args.config_file)
     amqp_listener.set_callback(webhooks.callback)
     amqp_listener.start()
 
 if __name__ == "__main__":
-    main()
+    config_file_default="./cfg/config.json"
+    parser = argparse.ArgumentParser(description='Configure webhooks on SIO events')
+    parser.add_argument('--config_file', type=str, help=f'Full path to the configuration file (default is {config_file_default})',
+                            default=config_file_default)
+    args = parser.parse_args()
+    main(args)
