@@ -10,7 +10,8 @@ services:
     volumes:
       - ./src:/usr/src/app
       - ../lib:/usr/src/lib
-    command: ["/usr/bin/python3", "/usr/src/app/main.py"]
+      - ./cfg/config.json:/usr/src/cfg/config.json:ro
+    command: ["/usr/bin/python3", "main.py", "--config_file", "/usr/src/cfg/config.json"]
     networks:
       core_sighthound:
         aliases:
