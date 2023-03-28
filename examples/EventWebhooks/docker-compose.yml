@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  example-sio-rtsp:
+  event-webhooks:
     build: .
     container_name: event-webhooks
     restart: always
@@ -10,8 +10,8 @@ services:
     volumes:
       - ./src:/usr/src/app
       - ../lib:/usr/src/lib
-      - ./cfg/config.json:/usr/src/cfg/config.json:ro
-    command: ["/usr/bin/python3", "main.py", "--config_file", "/usr/src/cfg/config.json"]
+      - ./conf/config.json:/usr/src/conf/config.json:ro
+    command: ["/usr/bin/python3", "main.py", "--config_file", "/usr/src/conf/config.json"]
     networks:
       core_sighthound:
         aliases:

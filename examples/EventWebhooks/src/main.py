@@ -26,7 +26,7 @@ def main(args):
     amqp_listener.start()
 
 if __name__ == "__main__":
-    config_file_default="./cfg/config.json"
+    config_file_default="./config/config.json"
     parser = argparse.ArgumentParser(description='Configure webhooks on SIO events')
     parser.add_argument('--config_file', type=str, help=f'Full path to the configuration file (default is {config_file_default})',
                             default=config_file_default)
