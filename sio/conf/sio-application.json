@@ -1,0 +1,23 @@
+{
+    "camera1" : {
+        "pipeline"      : "./share/pipelines/TrafficAnalytics/TrafficAnalyticsRTSP.yaml",
+        "restartPolicy" : "restart",
+        "parameters" : {
+            "VIDEO_IN" : "rtsp://sh-ui-backend:8555/live",
+	    "sourceId" : "camera1",
+            "recordTo":"/data/sighthound/media/output/video/camera1/",
+            "imageSaveDir":"",
+            "amqpHost":"rabbitmq",
+            "amqpPort":"5672",
+            "amqpExchange":"anypipe",
+            "amqpUser":"guest",
+            "amqpPassword":"guest",
+            "amqpErrorOnFailure":"true",
+            "updateOnlyOnChange":"false",
+            "detectionModel":"gen6eb",
+            "detectionMinConfidence":"0.5",
+            "sensorsConfigFile":"/etc/sio/sensors.json",
+            "useTracker":"true"
+	}
+    }
+}
