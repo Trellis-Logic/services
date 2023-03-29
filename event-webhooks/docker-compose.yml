@@ -12,3 +12,11 @@ services:
     volumes:
       - ./conf/config.json:/usr/src/conf/config.json:ro
     command: ["/usr/bin/python3", "/usr/src/app/main.py", "--config_file", "/usr/src/conf/config.json"]
+    networks:
+      core_sighthound:
+        aliases:
+          - ${EVENT_WEBHOOOKS_CONTAINER_NAME}
+
+networks:
+  core_sighthound:
+    external: true
