@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  event-webhooks:
+    image: ${EVENT_WEBHOOKS_DOCKER_IMAGE}:${EVENT_WEBHOOKS_DOCKER_TAG}
+    container_name: ${EVENT_WEBHOOKS_CONTAINER_NAME}
+    restart: always
+    environment:
+      - AMQP_HOST=rabbitmq
+      - AMQP_PORT=5672
+    env_file:
+      - .env
+    volumes:
+      - ./conf/config.json:/usr/src/conf/config.json:ro
+    command: ["/usr/bin/python3", "/usr/src/app/main.py", "--config_file", "/usr/src/conf/config.json"]
