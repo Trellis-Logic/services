@@ -15,7 +15,7 @@ services:
     networks:
       core_sighthound:
         aliases:
-          - ${EVENT_WEBHOOOKS_CONTAINER_NAME}
+          - ${EVENT_WEBHOOKS_CONTAINER_NAME}
 
 networks:
   core_sighthound:

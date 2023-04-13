@@ -3,7 +3,7 @@
         {
             "name" : "SensorOn",
             "sensor_name_match" : {
-                "presenceSensor" : "D4146053-308A-47F5-809A-4244AA86F6B9"
+                "presenceSensor" : "96D1ADE4-8CE2-4722-955F-16E56F16D488"
             },
             "sensor_content_match" : {
                 "updateCount" : 1
@@ -11,10 +11,10 @@
             "hooks" : [ {
                     "url" : "http://ntcip-relay-server:8080/pedcall/",
                     "json" : {
-                        "phase_control_group" : 1,
+                        "phase_control_group" : 5,
                         "phase" : 1,
                         "activate" : true,
-                        "mib" : "1.3.6.1.4.1.1206.4.2.1.1.5.1.7"
+                        "mib" : "1.3.6.1.4.1.1206.3.36.1.1.17.3.6.1.2.3"
                     }
                 }
             ]
@@ -22,7 +22,7 @@
         {
             "name" : "SensorOff",
             "sensor_name_match" : {
-                "presenceSensor" : "D4146053-308A-47F5-809A-4244AA86F6B9"
+                "presenceSensor" : "96D1ADE4-8CE2-4722-955F-16E56F16D488"
             },
             "sensor_content_match" : {
                 "endedAt" : ".*"
@@ -30,10 +30,10 @@
             "hooks" : [ {
                     "url" : "http://ntcip-relay-server:8080/pedcall/",
                     "json" : {
-                        "phase_control_group" : 1,
+                        "phase_control_group" : 5,
                         "phase" : 1,
                         "activate" : false,
-                        "mib" : "1.3.6.1.4.1.1206.4.2.1.1.5.1.7"
+                        "mib" : "1.3.6.1.4.1.1206.3.36.1.1.17.3.6.1.2.3"
                     }
                 }
             ]
