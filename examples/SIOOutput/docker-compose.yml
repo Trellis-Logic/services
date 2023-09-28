@@ -4,19 +4,17 @@ services:
     build: .
     container_name: example-sio-output
     restart: always
-    ports:
-      - "8554:8554"
     environment:
-      - AMQP_HOST=rabbitmq
+      - AMQP_HOST=192.168.99.37
       - AMQP_PORT=5672
     volumes:
       - ./src:/usr/src/app
       - ../lib:/usr/src/app/lib
-    networks:
-      core_sighthound:
-        aliases:
-          - example-sio-output
+#    networks:
+#      core_sighthound:
+#        aliases:
+#          - example-sio-output
 
-networks:
-  core_sighthound:
-    external: true
+#networks:
+#  core_sighthound:
+#    external: true
