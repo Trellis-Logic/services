@@ -11,7 +11,7 @@ class SIO:
             analyticsTimestamp = message.get("analyticsTimestamp",0)
             timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(analyticsTimestamp/1000))
             output = f"Message from source: {sourceId} frame: {frameId} at {timestamp_str}\n"
-            
+
             metaclasses = message.get("metaClasses", {})
             if metaclasses:
                 output += " With objects:\n"
@@ -23,19 +23,14 @@ class SIO:
                     y = box.get("y", -1)
                     output += f"  - {metaclass}:{object_class} ({object_id})  at ({x},{y})\n"
 
-            mediaEvents = message.get("mediaEvents", {})
-            if mediaEvents:
-                output += " With media events:\n"
-            for event in mediaEvents:
-                    type = event.get("type", "unknown")
-                    sequence = event.get("sequence", -1)
-                    output += f"  - {type} ({sequence})\n"
-
+            sensorEvents = message.get("sensorEvents", None)
+            if sensorEvents:
+                output += f"with sensorEvents {sensorEvents}"
             output += "---------------\n"
             print(output)
-            
-            
+
+
         except Exception as e:
             print(f"Caught exception {e} handling callback")
             traceback.print_exc()
-            
+
