@@ -4,6 +4,8 @@ from EventWebhooks import EventWebhooks
 import os
 import logging
 import argparse
+import traceback
+import sys
 
 def get_args():
     amqp_conf = {}
@@ -22,8 +24,14 @@ def main(args):
     amqp_listener = amqp.AMQPListener(amqp_conf)
     # Register the callback
     webhooks = EventWebhooks(args.config_file)
-    amqp_listener.set_callback(webhooks.callback)
-    amqp_listener.start()
+    try:
+        amqp_listener.set_callback(webhooks.callback)
+        amqp_listener.start()
+    except Exception as e:
+        print(f"Caught exception {e} starting amqp listener")
+        traceback.print_exc()
+    print("Shutting down")
+    webhooks.shutdown()
 
 if __name__ == "__main__":
     config_file_default="./config/config.json"
@@ -32,3 +40,5 @@ if __name__ == "__main__":
                             default=config_file_default)
     args = parser.parse_args()
     main(args)
+    # Failure is always due to interrupt or error
+    sys.exit(-1)

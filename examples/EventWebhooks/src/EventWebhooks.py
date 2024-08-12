@@ -75,7 +75,8 @@ class EventWebhooks:
                             hooks.append(EventWebhooks.HookAction(hook))
                         webhook['hooks'] = hooks
                     self.webhooks.append(EventWebhooks.RegexWebhook(webhook))
-        threading.Timer(10, self.print_status).start()
+        self.timer_thread = threading.Timer(10, self.print_status)
+        self.timer_thread.start()
 
     def print_status(self):
         sensor_matches = {}
@@ -85,7 +86,16 @@ class EventWebhooks:
                                         'hook_invocations': wh.hook_invocations
             }
         logging.info(f"Processed {self.callback_count} callbacks with hook status: {sensor_matches}")
-        threading.Timer(10, self.print_status).start()
+        self.timer_thread = threading.Timer(10, self.print_status)
+        self.timer_thread.start()
+
+    def shutdown(self):
+        if self.timer_thread:
+            logging.info(f"Cancelling timer thread")
+            self.timer_thread.cancel()
+            self.timer_thread = None
+        else:
+            logging.info(f"No thread running on shutdown")
 
 
     def callback(self, message):
