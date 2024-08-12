@@ -11,7 +11,7 @@ services:
       - .env
     volumes:
       - ./conf/config.json:/usr/src/conf/config.json:ro
-    command: ["/usr/bin/python3", "/usr/src/app/main.py", "--config_file", "/usr/src/conf/config.json"]
+    command: ["/usr/bin/env", "python3", "/usr/src/app/main.py", "--config_file", "/usr/src/conf/config.json"]
     networks:
       core_sighthound:
         aliases:
