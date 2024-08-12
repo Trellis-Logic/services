@@ -4,6 +4,7 @@ services:
   ntcip-relay-server:
     container_name: ntcip-relay-server
     image: ghcr.io/trellis-logic/ntcip-relay-server:1.1
+    restart: always
     volumes:
       - './conf/ntcip-relay-server.json:/data/config/config.json:ro'
     ports:
