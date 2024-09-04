@@ -14,10 +14,12 @@
             "amqpPassword":"guest",
             "amqpErrorOnFailure":"true",
             "updateOnlyOnChange":"false",
-            "detectionModel":"gen6eb",
+            "detectionModel":"gen7es",
             "detectionMinConfidence":"0.5",
             "sensorsConfigFile":"/etc/sio/sensors.json",
-            "useTracker":"true"
+            "useTracker":"true",
+            "fpsLimit":"10",
+            "maxQueueSize":"20"
 	}
     }
 }
